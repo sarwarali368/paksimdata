@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Number Lookup</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    input, button { padding: 10px; margin: 5px; }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .head { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>📱༺𝐒𝐀𝐑𝐖𝐀𝐑_𝐀𝐋𝐈༻༺𝐋𝐢𝐯𝐞_𝐓𝐫𝐚𝐜𝐤e𝐫_𝐋𝐨𝐨𝐤𝐮𝐩༻</h2>
+  <input type="text" id="num" placeholder="Enter phone number">
+  <button onclick="searchNumber()">Search</button>
+
+  <div id="results"></div>
+
+  <script>
+    async function searchNumber() {
+      const num = document.getElementById("num").value.trim();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "⏳ Loading...";
+
+      if (!num) {
+        alert("Please enter a number!");
+        resultsDiv.innerHTML = "";
+        return;
+      }
+
+      try {
+        // call your PHP API
+        const response = await fetch(`https://www.3patticenter.com/famofc/api/database.php?num=${encodeURIComponent(num)}`);
+        const data = await response.json();
+
+        if (data.status !== "success") {
+          resultsDiv.innerHTML = `<p style="color:red;">❌ ${data.message}</p>`;
+          return;
+        }
+
+        // show results
+        resultsDiv.innerHTML = "";
+        data.data.forEach(record => {
+          let card = `<div class="card">`;
+          for (let key in record) {
+            card += `<p><span class="head">${key}:</span> ${record[key]}</p>`;
+          }
+          card += `</div>`;
+          resultsDiv.innerHTML += card;
+        });
+
+      } catch (error) {
+        resultsDiv.innerHTML = `<p style="color:red;">⚠️ Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
